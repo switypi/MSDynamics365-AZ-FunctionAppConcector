@@ -30,7 +30,7 @@ namespace CrmDataverseConect
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
-            string name = req.Query["name"];
+            string searchname = req.Query["name"];
             DataResponse result;
 
             try
@@ -66,7 +66,13 @@ namespace CrmDataverseConect
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authResult.AccessToken);
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 
-                var response = await httpClient.GetAsync("accounts ?$top=10&$select=name");// "accounts ?$top=10&$select=name");
+                HttpResponseMessage response;
+                if (string.IsNullOrEmpty(searchname))
+                  response=  await httpClient.GetAsync("accounts");
+                else
+                  response=  await httpClient.GetAsync("accounts ?$filter=startswith(name,'(searchname)')");
+
+                // "accounts ?$top=10&select=searchname");
 
                 var options = new JsonSerializerOptions
                 {
@@ -81,7 +87,7 @@ namespace CrmDataverseConect
                     result = new DataResponse();
                     result.Accounts = resp;
                     result.IsSuccess = true;
-                    
+
                 }
                 else
                 {
@@ -89,9 +95,9 @@ namespace CrmDataverseConect
                     result = new DataResponse();
                     result.IsSuccess = false;
                     result.ErrorCode = errorResponse;
-                   // var error = JsonSerializer.Deserialize<ErrorResponse>(errorResponse, options);
+                    // var error = JsonSerializer.Deserialize<ErrorResponse>(errorResponse, options);
 
-                   
+
                 }
 
             }
@@ -122,6 +128,6 @@ namespace CrmDataverseConect
         public string ErrorCode { get; set; }
         public bool IsSuccess { get; set; }
 
-        public List<Account> Accounts { get; set;}
+        public List<Account> Accounts { get; set; }
     }
 }
