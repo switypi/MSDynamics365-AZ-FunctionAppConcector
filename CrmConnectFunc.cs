@@ -36,10 +36,10 @@ namespace CrmDataverseConect
             try
             {
 
-                string _clientId = "5ee7c545-54a6-4228-9c28-5fa41db04cea";
-                string _clientSecret = "rU-8Q~NDA4xtinqswslUNHDxa_md4boun6x_RdfA";
-                string _environment = "org85191994";
-                string _tenantId = "91d41eca-c9e8-4c16-9cc4-0131cc930c69";
+                string _clientId = "";
+                string _clientSecret = "";
+                string _environment = "";
+                string _tenantId = "";
                 string apiVersion = "9.2";
 
 
